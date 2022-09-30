@@ -1,4 +1,7 @@
-"""Functions to parse a file containing villager data."""
+"""Functions to parse a file containing villager data.
+
+name|species|personality|hobby|motto
+"""
 
 
 def all_species(filename):
@@ -13,8 +16,11 @@ def all_species(filename):
 
     species = set()
 
-    # TODO: replace this with your code
-
+    for line in open(filename):
+        line = line.rstrip()
+        villager_data = line.split('|')
+        species.add(villager_data[1])
+        
     return species
 
 
@@ -30,10 +36,25 @@ def get_villagers_by_species(filename, search_string="All"):
     """
 
     villagers = []
+    species_name = []
+    search_string = search_string.capitalize()  #handle cat/Cat/CAT as Cat
 
-    # TODO: replace this with your code
+    for line in open(filename):
+        line = line.rstrip()
+        villager_data = line.split('|')
 
-    return sorted(villagers)
+        if search_string != "All":
+            if villager_data[1] == search_string:
+                species_name.append((villager_data[1],villager_data[0]))
+            else: continue
+        else: species_name.append((villager_data[1],villager_data[0]))
+    
+    species_name.sort()
+
+    for tup in species_name:
+        villagers.append(tup[1])
+
+    return sorted(villagers)  #leaving off sorted with group by species
 
 
 def all_names_by_hobby(filename):
@@ -46,9 +67,36 @@ def all_names_by_hobby(filename):
         - list[list[str]]: a list of lists containing names
     """
 
-    # TODO: replace this with your code
+    
+    villagers = [['Fitness'],['Nature'],['Education'],['Music'],['Fashion'],
+                ['Play']]
+    hobby_name = []
 
-    return []
+    for line in open(filename):
+        line = line.rstrip()
+        villager_data = line.split('|')
+        hobby_name.append((villager_data[0],villager_data[3]))
+    
+    hobby_name.sort()
+
+    for tup in hobby_name:
+        if tup[1] == 'Fitness':
+            villagers[0].append(tup[0])
+        elif tup[1] == 'Nature':
+            villagers[1].append(tup[0])
+        elif tup[1] == 'Education':
+            villagers[2].append(tup[0])
+        elif tup[1] == 'Music':
+            villagers[3].append(tup[0])
+        elif tup[1] == 'Fashion':
+            villagers[4].append(tup[0])
+        elif tup[1] == 'Play':
+            villagers[5].append(tup[0])
+
+    # print(villagers[0])
+    # print(villagers[1])
+    # print(villagers[2])
+    return villagers
 
 
 def all_data(filename):
@@ -64,14 +112,18 @@ def all_data(filename):
         - list[tuple[str]]: a list of tuples containing strings
     """
 
+
     all_data = []
 
-    # TODO: replace this with your code
+    for line in open(filename):
+        line = line.rstrip()
+        tup = tuple(line.split('|'))
+        all_data.append(tup)
 
     return all_data
 
 
-def find_motto(filename, villager_name):
+def find_motto(filename, villager_name = "Any"):
     """Return the villager's motto.
 
     Return None if you're not able to find a villager with the
@@ -85,8 +137,16 @@ def find_motto(filename, villager_name):
         - str: the villager's motto or None
     """
 
-    # TODO: replace this with your code
+    villager_name = villager_name.capitalize()
 
+    for line in open(filename):
+        line = line.rstrip()
+        villager_data = line.split('|') #[name, species, ...]
+        if villager_data[0] == villager_name or villager_name == 'Any':
+            return villager_data[-1]
+    
+    # print("Villager not found.") #optional
+    return None
 
 def find_likeminded_villagers(filename, villager_name):
     """Return a set of villagers with the same personality as the given villager.
@@ -103,4 +163,24 @@ def find_likeminded_villagers(filename, villager_name):
         {'Bella', ..., 'Carmen'}
     """
 
-    # TODO: replace this with your code
+    villagers = set()
+    villager_name = villager_name.capitalize()
+    personality = None
+
+    for line in open(filename): #determine personality
+        line = line.rstrip()
+        villager_data = line.split('|')
+        if villager_data[0] == villager_name:
+            personality = villager_data[2]
+            break
+        
+    if personality == None:
+        return villagers                      #handles exception not found
+
+    for line in open(filename):
+        line = line.rstrip()
+        villager_data = line.split('|')
+        if villager_data[2] == personality:
+            villagers.add(villager_data[0])
+
+    return villagers
