@@ -68,8 +68,7 @@ def all_names_by_hobby(filename):
     """
 
     
-    villagers = [['Fitness'],['Nature'],['Education'],['Music'],['Fashion'],
-                ['Play']]
+    villagers = [[],[],[],[],[],[]]
     hobby_name = []
 
     for line in open(filename):

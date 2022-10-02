@@ -60,8 +60,7 @@ def all_names_by_hobby(villager_data = villager_data):
     """
 
     
-    by_hobby = [['Fitness'],['Nature'],['Education'],['Music'],['Fashion'],
-                ['Play']]
+    by_hobby = [[],[],[],[],[],[]]
     hobby_idx = {
         'Fitness': 0,
         'Nature': 1,
